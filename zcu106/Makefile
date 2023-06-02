@@ -25,10 +25,13 @@ VITIS_OVERLAY_DIR = $(VITIS_DIR)/$(OVERLAY)
 VITIS_OVERLAY_BIT = $(VITIS_OVERLAY_DIR)/binary_container_1/link/int/system.bit
 
 # the PAC dir
+PAC_NAME = custom_pac
+PF_NAME = custom_platform
+PAC_STRUCT = hwconfig/cfg/zcu106
 PAC_ROOT = $(PWD)/pac
-PAC_DIR = $(PAC_ROOT)/$(PFM)
-PAC_SUBDIR = $(PAC_DIR)/hwconfig/cfg/zcu106
-PAC_ZIP = $(PAC_ROOT)/$(PFM).zip
+PAC_DIR = $(PAC_ROOT)/$(PAC_NAME)
+PAC_SUBDIR = $(PAC_DIR)/$(PAC_STRUCT)
+PAC_ZIP = $(PAC_ROOT)/$(PAC_NAME).zip
 PAC_MANIFEST = $(PAC_SUBDIR)/../manifest.yaml
 PAC_BOOTGEN = $(PAC_SUBDIR)/bootgen.bif
 PETALINUX_IMAGES = $(PFM_DIR)/petalinux/$(PFM)/images/linux
@@ -111,21 +114,21 @@ $(PAC_ZIP):
 	cp $(PETALINUX_IMAGES)/bl31.elf $(PAC_SUBDIR)/.
 	cp $(PETALINUX_IMAGES)/pmufw.elf $(PAC_SUBDIR)/.
 	cp $(PETALINUX_IMAGES)/zynqmp_fsbl.elf $(PAC_SUBDIR)/.
-	@echo 'name: custom_platform' > $(PAC_MANIFEST)
+	@echo 'name: $(PF_NAME)' > $(PAC_MANIFEST)
 	@echo 'description: Boot assets for custom platform' >> $(PAC_MANIFEST)
 	@echo 'revision: 1' >> $(PAC_MANIFEST)
 	@echo 'assets:' >> $(PAC_MANIFEST)
 	@echo '    zcu106: zcu106' >> $(PAC_MANIFEST)
 	@echo 'the_ROM_image:' > $(PAC_BOOTGEN)
 	@echo '{' >> $(PAC_BOOTGEN)
-	@echo '        [bootloader, destination_cpu=a53-0] /usr/local/share/xlnx-config/custom_pac/hwconfig/cfg/zcu106/zynqmp_fsbl.elf' >> $(PAC_BOOTGEN)
-	@echo '        [pmufw_image] /usr/local/share/xlnx-config/custom_pac/hwconfig/cfg/zcu106/pmufw.elf' >> $(PAC_BOOTGEN)
-	@echo '        [destination_device=pl] /usr/local/share/xlnx-config/custom_pac/hwconfig/cfg/zcu106/system.bit' >> $(PAC_BOOTGEN)
-	@echo '        [destination_cpu=a53-0, exception_level=el-3, trustzone] /usr/local/share/xlnx-config/custom_pac/hwconfig/cfg/zcu106/bl31.elf' >> $(PAC_BOOTGEN)
-	@echo '        [destination_cpu=a53-0, load=0x00100000] /usr/local/share/xlnx-config/custom_pac/hwconfig/cfg/zcu106/system.dtb' >> $(PAC_BOOTGEN)
+	@echo '        [bootloader, destination_cpu=a53-0] /usr/local/share/xlnx-config/$(PAC_NAME)/$(PAC_STRUCT)/zynqmp_fsbl.elf' >> $(PAC_BOOTGEN)
+	@echo '        [pmufw_image] /usr/local/share/xlnx-config/$(PAC_NAME)/$(PAC_STRUCT)/pmufw.elf' >> $(PAC_BOOTGEN)
+	@echo '        [destination_device=pl] /usr/local/share/xlnx-config/$(PAC_NAME)/$(PAC_STRUCT)/system.bit' >> $(PAC_BOOTGEN)
+	@echo '        [destination_cpu=a53-0, exception_level=el-3, trustzone] /usr/local/share/xlnx-config/$(PAC_NAME)/$(PAC_STRUCT)/bl31.elf' >> $(PAC_BOOTGEN)
+	@echo '        [destination_cpu=a53-0, load=0x00100000] /usr/local/share/xlnx-config/$(PAC_NAME)/$(PAC_STRUCT)/system.dtb' >> $(PAC_BOOTGEN)
 	@echo '        [destination_cpu=a53-0, exception_level=el-2] /usr/lib/u-boot/xilinx_zynqmp_virt/u-boot.elf' >> $(PAC_BOOTGEN)
 	@echo '}' >> $(PAC_BOOTGEN)
-	zip -r $(PAC_ZIP) $(PAC_DIR)
+	cd $(PAC_ROOT) && zip -r $(PAC_ZIP) $(PAC_NAME)
 
 .PHONY: clean
 clean:
