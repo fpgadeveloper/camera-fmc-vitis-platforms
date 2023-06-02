@@ -7,7 +7,7 @@ RM = rm -rf
 XSCT = $(XILINX_VITIS)/bin/xsct
 JOBS ?= 8
 
-PLATFORM ?= kv260_ispMipiRx_vcu_DP
+PLATFORM ?= zcu106_rpiMipiRx_vcu_DP
 VERSION ?= 202210_1
 
 PFM_DIR = xilinx_$(PLATFORM)_$(VERSION)
