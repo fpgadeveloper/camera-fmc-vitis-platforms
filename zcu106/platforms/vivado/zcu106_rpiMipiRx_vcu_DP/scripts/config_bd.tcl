@@ -1256,18 +1256,6 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
    CONFIG.S00_HAS_REGSLICE {1} \
  ] $axi_ic_accel_ctrl
 
-  # Create instance: axi_ic_audio_mcu, and set properties
-  set axi_ic_audio_mcu [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ic_audio_mcu ]
-  set_property -dict [ list \
-   CONFIG.M00_HAS_REGSLICE {1} \
-   CONFIG.NUM_MI {1} \
-   CONFIG.NUM_SI {1} \
-   CONFIG.S00_HAS_REGSLICE {1} \
-   CONFIG.S01_HAS_REGSLICE {1} \
-   CONFIG.S02_HAS_DATA_FIFO {0} \
-   CONFIG.S02_HAS_REGSLICE {1} \
- ] $axi_ic_audio_mcu
-
   # Create instance: axi_ic_ctrl_100, and set properties
   set axi_ic_ctrl_100 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ic_ctrl_100 ]
   set_property -dict [ list \
@@ -1281,6 +1269,12 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   set_property -dict [ list \
    CONFIG.NUM_MI {3} \
  ] $axi_ic_ctrl_300
+
+  # Create instance: axi_ic_mcu, and set properties
+  set axi_ic_mcu [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_ic_mcu ]
+  set_property -dict [ list \
+   CONFIG.NUM_MI {1} \
+ ] $axi_ic_mcu
 
   # Create instance: axi_iic_0, and set properties
   set axi_iic_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_iic:2.1 axi_iic_0 ]
@@ -1297,22 +1291,22 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [ list \
-   CONFIG.CLKOUT1_JITTER {102.096} \
-   CONFIG.CLKOUT1_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT1_JITTER {102.087} \
+   CONFIG.CLKOUT1_PHASE_ERROR {87.181} \
    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} \
-   CONFIG.CLKOUT2_JITTER {115.843} \
-   CONFIG.CLKOUT2_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT2_JITTER {115.833} \
+   CONFIG.CLKOUT2_PHASE_ERROR {87.181} \
    CONFIG.CLKOUT2_USED {true} \
-   CONFIG.CLKOUT3_JITTER {102.096} \
-   CONFIG.CLKOUT3_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT3_JITTER {102.087} \
+   CONFIG.CLKOUT3_PHASE_ERROR {87.181} \
    CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {200.000} \
    CONFIG.CLKOUT3_USED {true} \
-   CONFIG.CLKOUT4_JITTER {132.698} \
-   CONFIG.CLKOUT4_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT4_JITTER {132.685} \
+   CONFIG.CLKOUT4_PHASE_ERROR {87.181} \
    CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {50.000} \
    CONFIG.CLKOUT4_USED {true} \
-   CONFIG.CLKOUT5_JITTER {83.777} \
-   CONFIG.CLKOUT5_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT5_JITTER {83.769} \
+   CONFIG.CLKOUT5_PHASE_ERROR {87.181} \
    CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {600.000} \
    CONFIG.CLKOUT5_USED {true} \
    CONFIG.CLK_OUT1_PORT {clk_200M} \
@@ -1356,38 +1350,47 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   # Create instance: xlconstant_1, and set properties
   set xlconstant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_1 ]
 
+  # Create instance: xlslice_0, and set properties
+  set xlslice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_0 ]
+  set_property -dict [ list \
+   CONFIG.DIN_FROM {1} \
+   CONFIG.DIN_TO {1} \
+   CONFIG.DIN_WIDTH {92} \
+   CONFIG.DOUT_WIDTH {1} \
+ ] $xlslice_0
+
   # Create interface connections
   connect_bd_intf_net -intf_net PS_0_M_AXI_HPM0_FPD [get_bd_intf_pins PS_0/M_AXI_HPM0_FPD] [get_bd_intf_pins axi_ic_accel_ctrl/S00_AXI]
   connect_bd_intf_net -intf_net PS_0_M_AXI_HPM1_FPD [get_bd_intf_pins PS_0/M_AXI_HPM1_FPD] [get_bd_intf_pins axi_ic_ctrl_300/S00_AXI]
   connect_bd_intf_net -intf_net S00_AXI_1 [get_bd_intf_pins PS_0/M_AXI_HPM0_LPD] [get_bd_intf_pins axi_ic_ctrl_100/S00_AXI]
   connect_bd_intf_net -intf_net axi_ic_accel_ctrl_M00_AXI [get_bd_intf_pins axi_ic_accel_ctrl/M00_AXI] [get_bd_intf_pins axi_vip_0/S_AXI]
-  connect_bd_intf_net -intf_net axi_ic_audio_mcu_M00_AXI [get_bd_intf_pins PS_0/S_AXI_LPD] [get_bd_intf_pins axi_ic_audio_mcu/M00_AXI]
-  connect_bd_intf_net -intf_net axi_ic_ctrl_100_M00_AXI [get_bd_intf_pins axi_ic_ctrl_100/M00_AXI] [get_bd_intf_pins raspi_pipeline/csirxss_s_axi]
   connect_bd_intf_net -intf_net axi_ic_ctrl_100_M02_AXI [get_bd_intf_pins axi_ic_ctrl_100/M02_AXI] [get_bd_intf_pins axi_iic_0/S_AXI]
-  connect_bd_intf_net -intf_net axi_ic_ctrl_300_M00_AXI [get_bd_intf_pins axi_ic_ctrl_300/M00_AXI] [get_bd_intf_pins raspi_pipeline/s_axi_ctrl_frmbuf]
   connect_bd_intf_net -intf_net axi_ic_ctrl_300_M01_AXI [get_bd_intf_pins axi_ic_ctrl_300/M01_AXI] [get_bd_intf_pins raspi_pipeline/s_axi_ctrl_dem]
   connect_bd_intf_net -intf_net axi_ic_ctrl_300_M02_AXI [get_bd_intf_pins axi_ic_ctrl_300/M02_AXI] [get_bd_intf_pins raspi_pipeline/s_axi_ctrl_vpss]
+  connect_bd_intf_net -intf_net axi_ic_mcu_M00_AXI [get_bd_intf_pins PS_0/S_AXI_LPD] [get_bd_intf_pins axi_ic_mcu/M00_AXI]
   connect_bd_intf_net -intf_net axi_iic_0_IIC [get_bd_intf_ports iic] [get_bd_intf_pins axi_iic_0/IIC]
   connect_bd_intf_net -intf_net axi_interconnect_ctrl_100_M01_AXI [get_bd_intf_pins axi_ic_ctrl_100/M01_AXI] [get_bd_intf_pins vcu/S_AXI_LITE]
+  connect_bd_intf_net -intf_net csirxss_s_axi_1 [get_bd_intf_pins axi_ic_ctrl_100/M00_AXI] [get_bd_intf_pins raspi_pipeline/csirxss_s_axi]
   connect_bd_intf_net -intf_net mipi_phy_if_1 [get_bd_intf_ports mipi_phy_if] [get_bd_intf_pins raspi_pipeline/mipi_phy_if]
   connect_bd_intf_net -intf_net raspi_pipeline_m_axi_mm_video [get_bd_intf_pins PS_0/S_AXI_HP0_FPD] [get_bd_intf_pins raspi_pipeline/m_axi_mm_video]
+  connect_bd_intf_net -intf_net s_axi_ctrl_frmbuf_1 [get_bd_intf_pins axi_ic_ctrl_300/M00_AXI] [get_bd_intf_pins raspi_pipeline/s_axi_ctrl_frmbuf]
   connect_bd_intf_net -intf_net vcu_M00_AXI_VCU_DEC [get_bd_intf_pins PS_0/S_AXI_HPC0_FPD] [get_bd_intf_pins vcu/M00_AXI_VCU_EN]
   connect_bd_intf_net -intf_net vcu_M00_AXI_VCU_EN [get_bd_intf_pins PS_0/S_AXI_HP2_FPD] [get_bd_intf_pins vcu/M00_AXI_VCU_DEC]
-  connect_bd_intf_net -intf_net vcu_M_AXI_VCU_MCU [get_bd_intf_pins axi_ic_audio_mcu/S00_AXI] [get_bd_intf_pins vcu/M_AXI_VCU_MCU]
+  connect_bd_intf_net -intf_net vcu_M_AXI_VCU_MCU [get_bd_intf_pins axi_ic_mcu/S00_AXI] [get_bd_intf_pins vcu/M_AXI_VCU_MCU]
 
   # Create port connections
   connect_bd_net -net ARESETN_1 [get_bd_pins axi_ic_ctrl_100/ARESETN] [get_bd_pins proc_sys_reset_100MHz/interconnect_aresetn]
-  connect_bd_net -net PS_0_emio_gpio_o [get_bd_pins PS_0/emio_gpio_o] [get_bd_pins raspi_pipeline/Din] [get_bd_pins vcu/Din]
+  connect_bd_net -net PS_0_emio_gpio_o [get_bd_pins PS_0/emio_gpio_o] [get_bd_pins raspi_pipeline/Din] [get_bd_pins vcu/Din] [get_bd_pins xlslice_0/Din]
   connect_bd_net -net PS_0_pl_clk0 [get_bd_pins PS_0/pl_clk0] [get_bd_pins clk_wiz_0/clk_in1]
   connect_bd_net -net PS_0_pl_resetn0 [get_bd_pins PS_0/pl_resetn0] [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_100MHz/ext_reset_in] [get_bd_pins proc_sys_reset_300MHz/ext_reset_in] [get_bd_pins proc_sys_reset_600MHz/ext_reset_in]
   connect_bd_net -net axi_iic_0_iic2intc_irpt [get_bd_pins axi_iic_0/iic2intc_irpt] [get_bd_pins xlconcat_0_0/In3]
   connect_bd_net -net clk_wiz_0_clk_100M [get_bd_pins PS_0/maxihpm0_lpd_aclk] [get_bd_pins axi_ic_ctrl_100/ACLK] [get_bd_pins axi_ic_ctrl_100/M00_ACLK] [get_bd_pins axi_ic_ctrl_100/M01_ACLK] [get_bd_pins axi_ic_ctrl_100/M02_ACLK] [get_bd_pins axi_ic_ctrl_100/S00_ACLK] [get_bd_pins axi_iic_0/s_axi_aclk] [get_bd_pins clk_wiz_0/clk_100M] [get_bd_pins proc_sys_reset_100MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/lite_aclk] [get_bd_pins vcu/s_axi_lite_aclk]
   connect_bd_net -net clk_wiz_0_clk_200M [get_bd_pins clk_wiz_0/clk_200M] [get_bd_pins raspi_pipeline/dphy_clk_200M]
-  connect_bd_net -net clk_wiz_0_clk_300M [get_bd_pins PS_0/maxihpm0_fpd_aclk] [get_bd_pins PS_0/maxihpm1_fpd_aclk] [get_bd_pins PS_0/saxi_lpd_aclk] [get_bd_pins PS_0/saxihp0_fpd_aclk] [get_bd_pins PS_0/saxihp1_fpd_aclk] [get_bd_pins PS_0/saxihp2_fpd_aclk] [get_bd_pins PS_0/saxihp3_fpd_aclk] [get_bd_pins PS_0/saxihpc0_fpd_aclk] [get_bd_pins PS_0/saxihpc1_fpd_aclk] [get_bd_pins axi_ic_accel_ctrl/ACLK] [get_bd_pins axi_ic_accel_ctrl/M00_ACLK] [get_bd_pins axi_ic_accel_ctrl/S00_ACLK] [get_bd_pins axi_ic_audio_mcu/ACLK] [get_bd_pins axi_ic_audio_mcu/M00_ACLK] [get_bd_pins axi_ic_audio_mcu/S00_ACLK] [get_bd_pins axi_ic_ctrl_300/ACLK] [get_bd_pins axi_ic_ctrl_300/M00_ACLK] [get_bd_pins axi_ic_ctrl_300/M01_ACLK] [get_bd_pins axi_ic_ctrl_300/M02_ACLK] [get_bd_pins axi_ic_ctrl_300/S00_ACLK] [get_bd_pins axi_vip_0/aclk] [get_bd_pins clk_wiz_0/clkv_200M] [get_bd_pins proc_sys_reset_300MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/aclk] [get_bd_pins vcu/m_axi_dec_aclk]
+  connect_bd_net -net clk_wiz_0_clk_300M [get_bd_pins PS_0/maxihpm0_fpd_aclk] [get_bd_pins PS_0/maxihpm1_fpd_aclk] [get_bd_pins PS_0/saxi_lpd_aclk] [get_bd_pins PS_0/saxihp0_fpd_aclk] [get_bd_pins PS_0/saxihp1_fpd_aclk] [get_bd_pins PS_0/saxihp2_fpd_aclk] [get_bd_pins PS_0/saxihp3_fpd_aclk] [get_bd_pins PS_0/saxihpc0_fpd_aclk] [get_bd_pins PS_0/saxihpc1_fpd_aclk] [get_bd_pins axi_ic_accel_ctrl/ACLK] [get_bd_pins axi_ic_accel_ctrl/M00_ACLK] [get_bd_pins axi_ic_accel_ctrl/S00_ACLK] [get_bd_pins axi_ic_ctrl_300/ACLK] [get_bd_pins axi_ic_ctrl_300/M00_ACLK] [get_bd_pins axi_ic_ctrl_300/M01_ACLK] [get_bd_pins axi_ic_ctrl_300/M02_ACLK] [get_bd_pins axi_ic_ctrl_300/S00_ACLK] [get_bd_pins axi_ic_mcu/ACLK] [get_bd_pins axi_ic_mcu/M00_ACLK] [get_bd_pins axi_ic_mcu/S00_ACLK] [get_bd_pins axi_vip_0/aclk] [get_bd_pins clk_wiz_0/clkv_200M] [get_bd_pins proc_sys_reset_300MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/aclk] [get_bd_pins vcu/m_axi_dec_aclk]
   connect_bd_net -net clk_wiz_0_clk_50M [get_bd_pins clk_wiz_0/clk_50M] [get_bd_pins vcu/pll_ref_clk]
   connect_bd_net -net clk_wiz_0_clk_600M [get_bd_pins clk_wiz_0/clk_600M] [get_bd_pins proc_sys_reset_600MHz/slowest_sync_clk]
-  connect_bd_net -net proc_sys_reset_1_interconnect_aresetn [get_bd_pins axi_ic_accel_ctrl/ARESETN] [get_bd_pins axi_ic_audio_mcu/ARESETN] [get_bd_pins axi_ic_ctrl_300/ARESETN] [get_bd_pins proc_sys_reset_300MHz/interconnect_aresetn]
-  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_pins axi_ic_accel_ctrl/M00_ARESETN] [get_bd_pins axi_ic_accel_ctrl/S00_ARESETN] [get_bd_pins axi_ic_audio_mcu/M00_ARESETN] [get_bd_pins axi_ic_audio_mcu/S00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M01_ARESETN] [get_bd_pins axi_ic_ctrl_300/M02_ARESETN] [get_bd_pins axi_ic_ctrl_300/S00_ARESETN] [get_bd_pins axi_vip_0/aresetn] [get_bd_pins proc_sys_reset_300MHz/peripheral_aresetn] [get_bd_pins raspi_pipeline/aresetn] [get_bd_pins vcu/aresetn]
+  connect_bd_net -net proc_sys_reset_1_interconnect_aresetn [get_bd_pins axi_ic_accel_ctrl/ARESETN] [get_bd_pins axi_ic_ctrl_300/ARESETN] [get_bd_pins axi_ic_mcu/ARESETN] [get_bd_pins proc_sys_reset_300MHz/interconnect_aresetn]
+  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_pins axi_ic_accel_ctrl/M00_ARESETN] [get_bd_pins axi_ic_accel_ctrl/S00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M01_ARESETN] [get_bd_pins axi_ic_ctrl_300/M02_ARESETN] [get_bd_pins axi_ic_ctrl_300/S00_ARESETN] [get_bd_pins axi_ic_mcu/M00_ARESETN] [get_bd_pins axi_ic_mcu/S00_ARESETN] [get_bd_pins axi_vip_0/aresetn] [get_bd_pins proc_sys_reset_300MHz/peripheral_aresetn] [get_bd_pins raspi_pipeline/aresetn] [get_bd_pins vcu/aresetn]
   connect_bd_net -net proc_sys_reset_2_peripheral_aresetn [get_bd_pins axi_ic_ctrl_100/M00_ARESETN] [get_bd_pins axi_ic_ctrl_100/M01_ARESETN] [get_bd_pins axi_ic_ctrl_100/M02_ARESETN] [get_bd_pins axi_ic_ctrl_100/S00_ARESETN] [get_bd_pins axi_iic_0/s_axi_aresetn] [get_bd_pins proc_sys_reset_100MHz/peripheral_aresetn] [get_bd_pins raspi_pipeline/lite_aresetn]
   connect_bd_net -net raspi_pipeline_csirxss_csi_irq [get_bd_pins raspi_pipeline/csirxss_csi_irq] [get_bd_pins xlconcat_0_0/In0]
   connect_bd_net -net raspi_pipeline_dem_irq [get_bd_pins raspi_pipeline/dem_irq] [get_bd_pins xlconcat_0_0/In1]
@@ -1395,6 +1398,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   connect_bd_net -net vcu_0_vcu_host_interrupt [get_bd_pins vcu/vcu_host_interrupt] [get_bd_pins xlconcat_0_0/In2]
   connect_bd_net -net xlconcat_0_0_dout [get_bd_pins PS_0/pl_ps_irq1] [get_bd_pins xlconcat_0_0/dout]
   connect_bd_net -net xlconstant_1_dout [get_bd_ports raspi_enable] [get_bd_pins xlconstant_1/dout]
+  connect_bd_net -net xlslice_0_Dout [get_bd_pins xlslice_0/Dout]
 
   # Create address segments
   assign_bd_address -offset 0xB0000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces PS_0/Data] [get_bd_addr_segs raspi_pipeline/ISPPipeline_accel_0/s_axi_CTRL/Reg] -force
@@ -1405,27 +1409,13 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   assign_bd_address -offset 0xB0040000 -range 0x00040000 -target_address_space [get_bd_addr_spaces PS_0/Data] [get_bd_addr_segs raspi_pipeline/v_proc_ss_0/s_axi_ctrl/Reg] -force
   assign_bd_address -offset 0x80100000 -range 0x00100000 -target_address_space [get_bd_addr_spaces PS_0/Data] [get_bd_addr_segs vcu/vcu_0/S_AXI_LITE/Reg] -force
   assign_bd_address -offset 0x00000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces raspi_pipeline/v_frmbuf_wr_0/Data_m_axi_mm_video] [get_bd_addr_segs PS_0/SAXIGP2/HP0_DDR_LOW] -force
+  assign_bd_address -offset 0xFF000000 -range 0x01000000 -target_address_space [get_bd_addr_spaces raspi_pipeline/v_frmbuf_wr_0/Data_m_axi_mm_video] [get_bd_addr_segs PS_0/SAXIGP2/HP0_LPS_OCM] -force
   assign_bd_address -offset 0xC0000000 -range 0x20000000 -target_address_space [get_bd_addr_spaces raspi_pipeline/v_frmbuf_wr_0/Data_m_axi_mm_video] [get_bd_addr_segs PS_0/SAXIGP2/HP0_QSPI] -force
-  assign_bd_address -offset 0x000800000000 -range 0x000800000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData0] [get_bd_addr_segs PS_0/SAXIGP4/HP2_DDR_HIGH] -force
+  assign_bd_address -offset 0x00000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/Code] [get_bd_addr_segs PS_0/SAXIGP6/LPD_DDR_LOW] -force
   assign_bd_address -offset 0x00000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData0] [get_bd_addr_segs PS_0/SAXIGP4/HP2_DDR_LOW] -force
-  assign_bd_address -offset 0xFF000000 -range 0x01000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData0] [get_bd_addr_segs PS_0/SAXIGP4/HP2_LPS_OCM] -force
-  assign_bd_address -offset 0xC0000000 -range 0x20000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData0] [get_bd_addr_segs PS_0/SAXIGP4/HP2_QSPI] -force
-  assign_bd_address -offset 0x000800000000 -range 0x000800000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData1] [get_bd_addr_segs PS_0/SAXIGP4/HP2_DDR_HIGH] -force
   assign_bd_address -offset 0x00000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData1] [get_bd_addr_segs PS_0/SAXIGP4/HP2_DDR_LOW] -force
-  assign_bd_address -offset 0xFF000000 -range 0x01000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData1] [get_bd_addr_segs PS_0/SAXIGP4/HP2_LPS_OCM] -force
-  assign_bd_address -offset 0xC0000000 -range 0x20000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/DecData1] [get_bd_addr_segs PS_0/SAXIGP4/HP2_QSPI] -force
-  assign_bd_address -offset 0x000800000000 -range 0x000800000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData0] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_DDR_HIGH] -force
   assign_bd_address -offset 0x00000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData0] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_DDR_LOW] -force
-  assign_bd_address -offset 0xFF000000 -range 0x01000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData0] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_LPS_OCM] -force
-  assign_bd_address -offset 0xC0000000 -range 0x20000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData0] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_QSPI] -force
-  assign_bd_address -offset 0x000800000000 -range 0x000800000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData1] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_DDR_HIGH] -force
   assign_bd_address -offset 0x00000000 -range 0x80000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData1] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_DDR_LOW] -force
-  assign_bd_address -offset 0xFF000000 -range 0x01000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData1] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_LPS_OCM] -force
-  assign_bd_address -offset 0xC0000000 -range 0x20000000 -target_address_space [get_bd_addr_spaces vcu/vcu_0/EncData1] [get_bd_addr_segs PS_0/SAXIGP0/HPC0_QSPI] -force
-
-  # Exclude Address Segments
-  exclude_bd_addr_seg -offset 0x000800000000 -range 0x000100000000 -target_address_space [get_bd_addr_spaces raspi_pipeline/v_frmbuf_wr_0/Data_m_axi_mm_video] [get_bd_addr_segs PS_0/SAXIGP2/HP0_DDR_HIGH]
-  exclude_bd_addr_seg -offset 0xFF000000 -range 0x01000000 -target_address_space [get_bd_addr_spaces raspi_pipeline/v_frmbuf_wr_0/Data_m_axi_mm_video] [get_bd_addr_segs PS_0/SAXIGP2/HP0_LPS_OCM]
 
 
   # Restore current instance
@@ -1436,8 +1426,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   set_property PFM.AXI_PORT {S_AXI_HPC1_FPD {memport "S_AXI_HP" sptag "HPC1" memory "PS_0 HPC1_DDR_LOW" is_range "false"} S_AXI_HP1_FPD {memport "S_AXI_HP" sptag "HP1" memory "PS_0 HP1_DDR_LOW" is_range "false"} S_AXI_HP3_FPD {memport "S_AXI_HP" sptag "HP3" memory "PS_0 HP3_DDR_LOW" is_range "false"}} [get_bd_cells /PS_0]
   set_property PFM.IRQ {pl_ps_irq0 {id 0 range 7}} [get_bd_cells /PS_0]
   set_property PFM.AXI_PORT {M01_AXI {memport "M_AXI_GP" sptag "" memory ""} M02_AXI {memport "M_AXI_GP" sptag "" memory ""} M03_AXI {memport "M_AXI_GP" sptag "" memory ""} M04_AXI {memport "M_AXI_GP" sptag "" memory ""} M05_AXI {memport "M_AXI_GP" sptag "" memory ""} M06_AXI {memport "M_AXI_GP" sptag "" memory ""} M07_AXI {memport "M_AXI_GP" sptag "" memory ""} M08_AXI {memport "M_AXI_GP" sptag "" memory ""} M09_AXI {memport "M_AXI_GP" sptag "" memory ""} M10_AXI {memport "M_AXI_GP" sptag "" memory ""} M11_AXI {memport "M_AXI_GP" sptag "" memory ""} M12_AXI {memport "M_AXI_GP" sptag "" memory ""} M13_AXI {memport "M_AXI_GP" sptag "" memory ""} M14_AXI {memport "M_AXI_GP" sptag "" memory ""} M15_AXI {memport "M_AXI_GP" sptag "" memory ""}} [get_bd_cells /axi_ic_accel_ctrl]
-  set_property PFM.AXI_PORT {S03_AXI {memport "MIG" sptag "LPD" memory "PS_0 LPD_DDR_LOW" is_range "false"} S04_AXI {memport "MIG" sptag "LPD" memory "PS_0 LPD_DDR_LOW" is_range "false"} S05_AXI {memport "MIG" sptag "LPD" memory "PS_0 LPD_DDR_LOW" is_range "false"}} [get_bd_cells /axi_ic_audio_mcu]
-  set_property PFM.CLOCK {clk_100M {id "2" is_default "false" proc_sys_reset "/proc_sys_reset_100MHz" status "fixed" freq_hz "99999000"} clkv_200M {id "15" is_default "true" proc_sys_reset "/proc_sys_reset_300MHz" status "fixed" freq_hz "199998000"} clk_600M {id "1" is_default "false" proc_sys_reset "/proc_sys_reset_600MHz" status "fixed" freq_hz "599994000"}} [get_bd_cells /clk_wiz_0]
+  set_property PFM.CLOCK {clk_100M {id "2" is_default "false" proc_sys_reset "/proc_sys_reset_100MHz" status "fixed" freq_hz "99999000"} clkv_200M {id "18" is_default "true" proc_sys_reset "/proc_sys_reset_300MHz" status "fixed" freq_hz "199998000"} clk_600M {id "1" is_default "false" proc_sys_reset "/proc_sys_reset_600MHz" status "fixed" freq_hz "599994000"}} [get_bd_cells /clk_wiz_0]
 
 
   validate_bd_design
