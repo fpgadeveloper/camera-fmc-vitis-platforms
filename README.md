@@ -34,6 +34,20 @@ source <path-to-petalinux>/2022.1/settings.sh
 source <path-to-vivado>/2022.1/settings64.sh
 ```
 
+Build all:
+
+```
+cd camera-fmc-vitis-platforms/zcu106
+make pac OVERLAY=smartcam
+```
+
+Build the overlay:
+
+```
+cd camera-fmc-vitis-platforms/zcu106
+make overlay OVERLAY=smartcam
+```
+
 Build the platforms:
 
 ```
@@ -52,7 +66,7 @@ To build the Platform Asset Container (PAC):
 
 ```
 cd camera-fmc-vitis-platforms/zcu106
-make pac PFM=zcu106_rpiMipiRx_vcu_DP
+make pac OVERLAY=smartcam
 ```
 
 
