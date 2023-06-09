@@ -10,12 +10,15 @@ PFM_DIR = $(PWD)/platforms
 PFM_VER = 202210_1
 
 # valid platforms / overlays
-PFM_LIST = zcu106_rpiMipiRx_vcu_DP
-OVERLAY_LIST = smartcam
+PFM_LIST = zcu106_rpiMipiRx_vcu_DP zcu106_rpiMipiRx_DP
+OVERLAY_LIST = smartcam nlp-smartvision
 
 # override platform name based on overlay
 ifeq ($(OVERLAY),smartcam)
   override PFM = zcu106_rpiMipiRx_vcu_DP
+endif
+ifeq ($(OVERLAY),nlp-smartvision)
+  override PFM = zcu106_rpiMipiRx_DP
 endif
 
 PFM_XPFM = $(PFM_DIR)/xilinx_$(PFM)_$(PFM_VER)/$(PFM).xpfm

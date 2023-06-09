@@ -9,7 +9,7 @@ VIV_PRJ_DIR = $(VIV_DIR)/project
 VIV_XSA = $(VIV_PRJ_DIR)/$(PFM).xsa
 
 # valid platforms / overlays
-PFM_LIST = zcu106_rpiMipiRx_vcu_DP
+PFM_LIST = zcu106_rpiMipiRx_vcu_DP zcu106_rpiMipiRx_DP
 
 PETL_DIR = $(PWD)/$(PFM)
 PETL_IMG_DIR = $(PETL_DIR)/images/linux

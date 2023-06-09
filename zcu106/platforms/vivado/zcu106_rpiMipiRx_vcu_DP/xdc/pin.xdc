@@ -11,7 +11,7 @@ set_property DIFF_TERM_ADV TERM_100 [get_ports {mipi_phy_if_clk_n}]
 set_property DIFF_TERM_ADV TERM_100 [get_ports {mipi_phy_if_data_p[*]}]
 set_property DIFF_TERM_ADV TERM_100 [get_ports {mipi_phy_if_data_n[*]}]
 
-#Raspi Enable HDA09
+#Raspi Enable
 set_property PACKAGE_PIN G16 [get_ports {raspi_enable}]
 set_property IOSTANDARD LVCMOS12 [get_ports {raspi_enable}]
 set_property SLEW SLOW [get_ports {raspi_enable}]

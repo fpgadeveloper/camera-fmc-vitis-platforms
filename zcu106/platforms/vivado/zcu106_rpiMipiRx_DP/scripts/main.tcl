@@ -1,7 +1,7 @@
 # (C) Copyright 2020 - 2022 Xilinx, Inc.
 # SPDX-License-Identifier: Apache-2.0
 
-set proj_name zcu106_rpiMipiRx_vcu_DP
+set proj_name zcu106_rpiMipiRx_DP
 set proj_dir ./project
 set proj_board [get_board_parts "*:zcu106:*" -latest_file_version]
 set bd_tcl_dir ./scripts
