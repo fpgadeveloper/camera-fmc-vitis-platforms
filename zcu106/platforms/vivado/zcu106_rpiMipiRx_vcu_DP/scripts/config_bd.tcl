@@ -127,10 +127,10 @@ if { $bCheckIPs == 1 } {
 xilinx.com:ip:zynq_ultra_ps_e:3.4\
 xilinx.com:ip:axi_iic:2.1\
 xilinx.com:ip:axi_vip:1.1\
+xilinx.com:ip:xlconstant:1.1\
 xilinx.com:ip:clk_wiz:6.0\
 xilinx.com:ip:proc_sys_reset:5.0\
 xilinx.com:ip:xlconcat:2.1\
-xilinx.com:ip:xlconstant:1.1\
 xilinx.com:ip:xlslice:1.0\
 xilinx.com:hls:ISPPipeline_accel:1.0\
 xilinx.com:ip:mipi_csi2_rx_subsystem:5.1\
@@ -353,6 +353,8 @@ proc create_hier_cell_raspi_pipeline { parentCell nameHier } {
   create_bd_pin -dir I -from 91 -to 0 Din
   create_bd_pin -dir I -type clk aclk
   create_bd_pin -dir I -type rst aresetn
+  create_bd_pin -dir I bg0_pin6_nc_0
+  create_bd_pin -dir I bg1_pin6_nc_0
   create_bd_pin -dir O -type intr csirxss_csi_irq
   create_bd_pin -dir O -type intr dem_irq
   create_bd_pin -dir I -type clk dphy_clk_200M
@@ -367,27 +369,33 @@ proc create_hier_cell_raspi_pipeline { parentCell nameHier } {
   set mipi_csi2_rx_subsyst_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mipi_csi2_rx_subsystem:5.1 mipi_csi2_rx_subsyst_0 ]
   set_property -dict [ list \
    CONFIG.AXIS_TDEST_WIDTH {4} \
-   CONFIG.CLK_LANE_IO_LOC {F17} \
-   CONFIG.CLK_LANE_IO_LOC_NAME {IO_L13P_T2L_N0_GC_QBC_67} \
+   CONFIG.CLK_LANE_IO_LOC {H18} \
+   CONFIG.CLK_LANE_IO_LOC_NAME {IO_L16P_T2U_N6_QBC_AD3P_67} \
    CONFIG.CMN_NUM_LANES {2} \
    CONFIG.CMN_NUM_PIXELS {1} \
    CONFIG.CMN_PXL_FORMAT {RAW10} \
    CONFIG.CMN_VC {All} \
    CONFIG.CSI_BUF_DEPTH {512} \
+   CONFIG.C_CLK_LANE_IO_POSITION {32} \
    CONFIG.C_CSI_EN_ACTIVELANES {false} \
    CONFIG.C_CSI_EN_CRC {false} \
    CONFIG.C_CSI_FILTER_USERDATATYPE {false} \
+   CONFIG.C_DATA_LANE0_IO_POSITION {13} \
+   CONFIG.C_DATA_LANE1_IO_POSITION {10} \
    CONFIG.C_DPHY_LANES {2} \
    CONFIG.C_EN_BG0_PIN0 {false} \
+   CONFIG.C_EN_BG0_PIN6 {true} \
    CONFIG.C_EN_BG1_PIN0 {false} \
+   CONFIG.C_EN_BG1_PIN6 {true} \
+   CONFIG.C_EN_BG3_PIN6 {false} \
    CONFIG.C_EN_CSI_V2_0 {false} \
    CONFIG.C_HS_LINE_RATE {912} \
    CONFIG.C_HS_SETTLE_NS {145} \
    CONFIG.C_STRETCH_LINE_RATE {1500} \
-   CONFIG.DATA_LANE0_IO_LOC {H19} \
-   CONFIG.DATA_LANE0_IO_LOC_NAME {IO_L15P_T2L_N4_AD11P_67} \
-   CONFIG.DATA_LANE1_IO_LOC {L20} \
-   CONFIG.DATA_LANE1_IO_LOC_NAME {IO_L19P_T3L_N0_DBC_AD9P_67} \
+   CONFIG.DATA_LANE0_IO_LOC {D16} \
+   CONFIG.DATA_LANE0_IO_LOC_NAME {IO_L7P_T1L_N0_QBC_AD13P_67} \
+   CONFIG.DATA_LANE1_IO_LOC {C13} \
+   CONFIG.DATA_LANE1_IO_LOC_NAME {IO_L6P_T0U_N10_AD6P_67} \
    CONFIG.DPY_EN_REG_IF {true} \
    CONFIG.DPY_LINE_RATE {912} \
    CONFIG.HP_IO_BANK_SELECTION {67} \
@@ -465,6 +473,8 @@ proc create_hier_cell_raspi_pipeline { parentCell nameHier } {
   # Create port connections
   connect_bd_net -net Din_1 [get_bd_pins Din] [get_bd_pins xlslice_4/Din] [get_bd_pins xlslice_5/Din] [get_bd_pins xlslice_6/Din]
   connect_bd_net -net ISPPipeline_accel_0_interrupt [get_bd_pins dem_irq] [get_bd_pins ISPPipeline_accel_0/interrupt]
+  connect_bd_net -net bg0_pin6_nc_0_1 [get_bd_pins bg0_pin6_nc_0] [get_bd_pins mipi_csi2_rx_subsyst_0/bg0_pin6_nc]
+  connect_bd_net -net bg1_pin6_nc_0_1 [get_bd_pins bg1_pin6_nc_0] [get_bd_pins mipi_csi2_rx_subsyst_0/bg1_pin6_nc]
   connect_bd_net -net clk_wiz_0_clk_100M [get_bd_pins lite_aclk] [get_bd_pins mipi_csi2_rx_subsyst_0/lite_aclk]
   connect_bd_net -net clk_wiz_0_clk_200M [get_bd_pins dphy_clk_200M] [get_bd_pins mipi_csi2_rx_subsyst_0/dphy_clk_200M]
   connect_bd_net -net clk_wiz_0_clk_300M [get_bd_pins aclk] [get_bd_pins ISPPipeline_accel_0/ap_clk] [get_bd_pins mipi_csi2_rx_subsyst_0/video_aclk] [get_bd_pins v_frmbuf_wr_0/ap_clk] [get_bd_pins v_proc_ss_0/aclk_axis] [get_bd_pins v_proc_ss_0/aclk_ctrl]
@@ -520,6 +530,9 @@ proc create_root_design { parentCell } {
 
 
   # Create ports
+  set bg0_pin6_nc_0 [ create_bd_port -dir I bg0_pin6_nc_0 ]
+  set bg1_pin6_nc_0 [ create_bd_port -dir I bg1_pin6_nc_0 ]
+  set clk_sel [ create_bd_port -dir O -from 1 -to 0 clk_sel ]
   set raspi_enable [ create_bd_port -dir O -from 0 -to 0 raspi_enable ]
 
   # Create instance: PS_0, and set properties
@@ -1288,6 +1301,13 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
    CONFIG.INTERFACE_MODE {SLAVE} \
  ] $axi_vip_0
 
+  # Create instance: clk_sel, and set properties
+  set clk_sel [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 clk_sel ]
+  set_property -dict [ list \
+   CONFIG.CONST_VAL {2} \
+   CONFIG.CONST_WIDTH {2} \
+ ] $clk_sel
+
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [ list \
@@ -1386,6 +1406,9 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   connect_bd_net -net PS_0_pl_clk0 [get_bd_pins PS_0/pl_clk0] [get_bd_pins clk_wiz_0/clk_in1]
   connect_bd_net -net PS_0_pl_resetn0 [get_bd_pins PS_0/pl_resetn0] [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_100MHz/ext_reset_in] [get_bd_pins proc_sys_reset_200MHz/ext_reset_in] [get_bd_pins proc_sys_reset_400MHz/ext_reset_in]
   connect_bd_net -net axi_iic_0_iic2intc_irpt [get_bd_pins axi_iic_0/iic2intc_irpt] [get_bd_pins xlconcat_0_0/In3]
+  connect_bd_net -net bg0_pin6_nc_0_1 [get_bd_ports bg0_pin6_nc_0] [get_bd_pins raspi_pipeline/bg0_pin6_nc_0]
+  connect_bd_net -net bg1_pin6_nc_0_1 [get_bd_ports bg1_pin6_nc_0] [get_bd_pins raspi_pipeline/bg1_pin6_nc_0]
+  connect_bd_net -net clk_sel_dout [get_bd_ports clk_sel] [get_bd_pins clk_sel/dout]
   connect_bd_net -net clk_wiz_0_clk_100M [get_bd_pins PS_0/maxihpm0_lpd_aclk] [get_bd_pins axi_ic_ctrl_100/ACLK] [get_bd_pins axi_ic_ctrl_100/M00_ACLK] [get_bd_pins axi_ic_ctrl_100/M01_ACLK] [get_bd_pins axi_ic_ctrl_100/M02_ACLK] [get_bd_pins axi_ic_ctrl_100/S00_ACLK] [get_bd_pins axi_iic_0/s_axi_aclk] [get_bd_pins clk_wiz_0/clk_100M] [get_bd_pins proc_sys_reset_100MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/lite_aclk] [get_bd_pins vcu/s_axi_lite_aclk]
   connect_bd_net -net clk_wiz_0_clk_200M [get_bd_pins clk_wiz_0/clk_200M] [get_bd_pins raspi_pipeline/dphy_clk_200M]
   connect_bd_net -net clk_wiz_0_clk_300M [get_bd_pins PS_0/maxihpm0_fpd_aclk] [get_bd_pins PS_0/maxihpm1_fpd_aclk] [get_bd_pins PS_0/saxi_lpd_aclk] [get_bd_pins PS_0/saxihp0_fpd_aclk] [get_bd_pins PS_0/saxihp1_fpd_aclk] [get_bd_pins PS_0/saxihp2_fpd_aclk] [get_bd_pins PS_0/saxihp3_fpd_aclk] [get_bd_pins PS_0/saxihpc0_fpd_aclk] [get_bd_pins PS_0/saxihpc1_fpd_aclk] [get_bd_pins axi_ic_accel_ctrl/ACLK] [get_bd_pins axi_ic_accel_ctrl/M00_ACLK] [get_bd_pins axi_ic_accel_ctrl/S00_ACLK] [get_bd_pins axi_ic_ctrl_300/ACLK] [get_bd_pins axi_ic_ctrl_300/M00_ACLK] [get_bd_pins axi_ic_ctrl_300/M01_ACLK] [get_bd_pins axi_ic_ctrl_300/M02_ACLK] [get_bd_pins axi_ic_ctrl_300/S00_ACLK] [get_bd_pins axi_ic_mcu/ACLK] [get_bd_pins axi_ic_mcu/M00_ACLK] [get_bd_pins axi_ic_mcu/S00_ACLK] [get_bd_pins axi_vip_0/aclk] [get_bd_pins clk_wiz_0/clkv_200M] [get_bd_pins proc_sys_reset_200MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/aclk] [get_bd_pins vcu/m_axi_dec_aclk]
