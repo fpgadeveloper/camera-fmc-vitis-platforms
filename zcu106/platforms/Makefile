@@ -46,7 +46,7 @@ $(PFM_XPFM): $(PETL_BL31_ELF) $(PETL_PMUFW_ELF) $(PETL_FSBL_ELF) $(PETL_DTB)
 	@echo 'Vitis platform available at $(PFM_DIR)'
 
 $(PETL_BL31_ELF) $(PETL_PMUFW_ELF) $(PETL_FSBL_ELF) $(PETL_DTB): $(VIV_XSA)
-	make -C $(PETL_DIR) petalinux PFM=$(PLATFORM)
+	make -C petalinux petalinux PFM=$(PLATFORM)
 
 $(VIV_XSA):
 	make -C $(VIV_DIR) xsa JOBS=$(JOBS)

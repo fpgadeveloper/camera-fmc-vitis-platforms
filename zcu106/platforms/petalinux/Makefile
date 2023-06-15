@@ -2,8 +2,9 @@ RM = rm -rf
 VIVADO = $(XILINX_VIVADO)/bin/vivado
 JOBS ?= 8
 PFM ?= zcu106_rpiMipiRx_vcu_DP
+PETL_ROOT = $(shell pwd)
 
-VIV_DIR = $(PWD)/../vivado/$(PFM)
+VIV_DIR = $(PETL_ROOT)/../vivado/$(PFM)
 VIV_PRJ_DIR = $(VIV_DIR)/project
 
 VIV_XSA = $(VIV_PRJ_DIR)/$(PFM).xsa
@@ -11,7 +12,7 @@ VIV_XSA = $(VIV_PRJ_DIR)/$(PFM).xsa
 # valid platforms / overlays
 PFM_LIST = zcu106_rpiMipiRx_vcu_DP zcu106_rpiMipiRx_DP
 
-PETL_DIR = $(PWD)/$(PFM)
+PETL_DIR = $(PETL_ROOT)/$(PFM)
 PETL_IMG_DIR = $(PETL_DIR)/images/linux
 PETL_BL31_ELF = $(PETL_IMG_DIR)/bl31.elf
 PETL_PMUFW_ELF = $(PETL_IMG_DIR)/pmufw.elf
