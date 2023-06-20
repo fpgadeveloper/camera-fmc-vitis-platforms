@@ -1,3 +1,3 @@
-[submodule "zcu106/overlays/Vitis_Libraries"]
-	path = zcu106/overlays/Vitis_Libraries
+[submodule "submodules/Vitis_Libraries"]
+	path = submodules/Vitis_Libraries
 	url = https://github.com/Xilinx/Vitis_Libraries.git
