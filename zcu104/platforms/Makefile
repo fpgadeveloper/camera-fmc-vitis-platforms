@@ -55,5 +55,5 @@ $(VIV_XSA):
 clean:
 	-@$(RM) .Xil boot image linux.bif ws $(PFM_DIR)
 	make -C $(VIV_DIR) clean
-	make -C $(PETL_DIR) clean
+	make -C petalinux clean
 
