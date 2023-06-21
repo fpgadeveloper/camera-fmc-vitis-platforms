@@ -19,7 +19,7 @@
 &amba_pl {
 	afi0: afi0 {
 		compatible = "xlnx,afi-fpga";
-		config-afi = <0 0>, <1 0>, <2 0>, <3 0>, <4 1>, <5 1>, <6 0>, <7 0>, <8 1>, <9 1>, <10 2>, <11 2>, <12 2>, <13 2>, <14 0x0>, <15 0x000>;
+		config-afi = <0 0>, <1 0>, <2 0>, <3 0>, <4 1>, <5 1>, <6 0>, <7 0>, <8 0>, <9 0>, <10 0>, <11 0>, <12 0>, <13 0>, <14 0x0>, <15 0x000>;
 	};
 
 	clocking0: clocking0 {
@@ -31,7 +31,6 @@
 		compatible = "xlnx,fclk";
 	};
 
-	/*
 	clocking1: clocking1 {
 		#clock-cells = <0>;
 		assigned-clock-rates = <99999001>;
@@ -40,9 +39,15 @@
 		clocks = <&zynqmp_clk 72>;
 		compatible = "xlnx,fclk";
 	};
-	*/
 
-	imx219_clk: imx219_clk {
+	/* fpga clocks */
+	misc_clk_5: misc_clk_5 {
+		#clock-cells = <0x0>;
+		clock-frequency = <49999500>;
+		compatible = "fixed-clock";
+	};
+
+	misc_clk_7: misc_clk_7 {
 		#clock-cells = <0x0>;
 		clock-frequency = <24000000>;
 		compatible = "fixed-clock";
@@ -82,17 +87,17 @@
 };
 
 &axi_iic_0 {
-	imx219_cam1: sensor@10 {
+	imx219: sensor@10 {
 		compatible = "sony,imx219";
 		reg = <0x10>;
-		clocks = <&imx219_clk>;
+		clocks = <&misc_clk_7>;
 		VANA-supply = <&imx219_vana>;   /* 2.8v */
 		VDIG-supply = <&imx219_vdig>;   /* 1.8v */
 		VDDL-supply = <&imx219_vddl>;   /* 1.2v */
 
 		port {
-		     imx219_cam1_0: endpoint {
-			remote-endpoint = <&mipi_csi_inrpi_cam1_pipe_mipi_csi2_rx_subsyst_0>;
+		     imx219_0: endpoint {
+			remote-endpoint = <&mipi_csi_inraspi_pipeline_mipi_csi2_rx_subsyst_0>;
 			data-lanes = <1 2>;
 			link-frequencies = /bits/ 64 <456000000>;
 			};
@@ -100,42 +105,15 @@
 	};
 };
 
-&axi_iic_1 {
-	imx219_cam2: sensor@10 {
-		compatible = "sony,imx219";
-		reg = <0x10>;
-		clocks = <&imx219_clk>;
-		VANA-supply = <&imx219_vana>;   /* 2.8v */
-		VDIG-supply = <&imx219_vdig>;   /* 1.8v */
-		VDDL-supply = <&imx219_vddl>;   /* 1.2v */
-
-		port {
-		     imx219_cam2_0: endpoint {
-			remote-endpoint = <&mipi_csi_inrpi_cam2_pipe_mipi_csi2_rx_subsyst_0>;
-			data-lanes = <1 2>;
-			link-frequencies = /bits/ 64 <456000000>;
-			};
-		};
-	};
-};
-
-&rpi_cam1_pipe_mipi_csi2_rx_subsyst_0 {
+&raspi_pipeline_mipi_csi2_rx_subsyst_0 {
 	xlnx,en-active-lanes;
 };
 
-&rpi_cam2_pipe_mipi_csi2_rx_subsyst_0 {
-	xlnx,en-active-lanes;
+&mipi_csi_inraspi_pipeline_mipi_csi2_rx_subsyst_0 {
+	remote-endpoint = <&imx219_0>;
 };
 
-&mipi_csi_inrpi_cam1_pipe_mipi_csi2_rx_subsyst_0 {
-	remote-endpoint = <&imx219_cam1_0>;
-};
-
-&mipi_csi_inrpi_cam2_pipe_mipi_csi2_rx_subsyst_0 {
-	remote-endpoint = <&imx219_cam2_0>;
-};
-
-&rpi_cam1_pipe_ISPPipeline_accel_0 {
+&raspi_pipeline_ISPPipeline_accel_0 {
 	compatible = "xlnx,ISPPipeline_accel";
 	reset-gpios = <&gpio 82 1>;
 	xlnx,max-height = <1080>;
@@ -151,8 +129,8 @@
 			reg = <0>;
 			xlnx,video-width = <10>;
 			xlnx,cfa-pattern = "rggb";
-				rpi_cam1_pipe_ISPPipeline_accel_0rpi_cam1_pipe_mipi_csi2_rx_subsyst_0: endpoint {
-				remote-endpoint = <&mipi_csirx_outrpi_cam1_pipe_mipi_csi2_rx_subsyst_0>;
+				raspi_pipeline_ISPPipeline_accel_0raspi_pipeline_mipi_csi2_rx_subsyst_0: endpoint {
+				remote-endpoint = <&mipi_csirx_outraspi_pipeline_mipi_csi2_rx_subsyst_0>;
 			};
 		};
 			port@1 {
@@ -160,63 +138,26 @@
 			xlnx,video-width = <8>;
 			xlnx,cfa-pattern = "rggb";
 			
-			imx_cam1_demosaic_out: endpoint {
-				remote-endpoint = <&imx_cam1_scaler_in>;
+			imx_demosaic_out: endpoint {
+				remote-endpoint = <&imx_scaler_in>;
 			};
 		};
 	};
 };
 
-&rpi_cam2_pipe_ISPPipeline_accel_0 {
-	compatible = "xlnx,ISPPipeline_accel";
-	reset-gpios = <&gpio 85 1>;
-	xlnx,max-height = <1080>;
-	xlnx,max-width = <1920>;
-	xlnx,rgain = <128>;
-	xlnx,bgain = <210>;
-	xlnx,pawb = <350>;
-	xlnx,mode-reg = <1>;
-	ports {
-		#address-cells = <1>;
-		#size-cells = <0>;
-			port@0 {
-			reg = <0>;
-			xlnx,video-width = <10>;
-			xlnx,cfa-pattern = "rggb";
-				rpi_cam2_pipe_ISPPipeline_accel_0rpi_cam2_pipe_mipi_csi2_rx_subsyst_0: endpoint {
-				remote-endpoint = <&mipi_csirx_outrpi_cam2_pipe_mipi_csi2_rx_subsyst_0>;
-			};
-		};
-			port@1 {
-			reg = <1>;
-			xlnx,video-width = <8>;
-			xlnx,cfa-pattern = "rggb";
-			
-			imx_cam2_demosaic_out: endpoint {
-				remote-endpoint = <&imx_cam2_scaler_in>;
-			};
-		};
-	};
-};
-
-&rpi_cam1_pipe_v_proc_ss_0 {
+&raspi_pipeline_v_proc_ss_0 {
 	compatible = "xlnx,v-vpss-scaler-2.2";
 };
 
-&rpi_cam2_pipe_v_proc_ss_0 {
-	compatible = "xlnx,v-vpss-scaler-2.2";
-};
-
-&scaler_port0rpi_cam1_pipe_v_proc_ss_0 {
-	imx_cam1_scaler_in: endpoint {
-		remote-endpoint = <&imx_cam1_demosaic_out>;
+&scaler_port0raspi_pipeline_v_proc_ss_0 {
+	imx_scaler_in: endpoint {
+		remote-endpoint = <&imx_demosaic_out>;
 	};
 };
 
-&scaler_port0rpi_cam2_pipe_v_proc_ss_0 {
-	imx_cam2_scaler_in: endpoint {
-		remote-endpoint = <&imx_cam2_demosaic_out>;
-	};
+/* vcu encode/decode */
+&vcu_vcu_0 {
+	xlnx,skip-isolation;
 };
 
 
