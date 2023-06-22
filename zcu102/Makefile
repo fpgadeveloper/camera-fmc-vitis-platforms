@@ -9,6 +9,8 @@ PWD = $(shell readlink -f .)
 PFM_DIR = $(PWD)/platforms
 PFM_VER = 202210_1
 
+PLNX_DIR = $(PWD)/petalinux
+
 # valid platforms / overlays
 PFM_LIST = zcu102_rpiMipiRx_DP
 OVERLAY_LIST = smartcam nlp-smartvision
@@ -35,8 +37,13 @@ PAC_SUBDIR = $(PAC_DIR)/$(PAC_STRUCT)
 PAC_ZIP = $(PAC_ROOT)/$(PAC_NAME).zip
 PAC_MANIFEST = $(PAC_SUBDIR)/../manifest.yaml
 PAC_BOOTGEN = $(PAC_SUBDIR)/bootgen.bif
-PETALINUX_IMAGES = $(PFM_DIR)/petalinux/$(PFM)/images/linux
 
+PETL_DIR = petalinux/$(PFM)
+PETL_IMG_DIR = $(PETL_DIR)/images/linux
+PETL_BL31_ELF = $(PETL_IMG_DIR)/bl31.elf
+PETL_PMUFW_ELF = $(PETL_IMG_DIR)/pmufw.elf
+PETL_FSBL_ELF = $(PETL_IMG_DIR)/zynqmp_fsbl.elf
+PETL_DTB = $(PETL_IMG_DIR)/system.dtb
 
 .PHONY: help
 help:
@@ -44,6 +51,9 @@ help:
 	@echo ''
 	@echo '  make pac OVERLAY=<val>'
 	@echo '    Build the Platform Assets Container (PAC).'
+	@echo ''
+	@echo '  make petalinux OVERLAY=<val>'
+	@echo '    Build the PetaLinux project.'
 	@echo ''
 	@echo '  make overlay OVERLAY=<val>'
 	@echo '    Build the Vitis application overlay.'
@@ -62,7 +72,7 @@ help:
 
 .PHONY: pac
 pac: $(PAC_ZIP)
-$(PAC_ZIP): $(VITIS_OVERLAY_BIT)
+$(PAC_ZIP): $(PETL_BL31_ELF) $(PETL_PMUFW_ELF) $(PETL_FSBL_ELF) $(PETL_DTB)
 	@valid=0; \
 	for o in $(OVERLAY_LIST); do \
 	  if [ "$$o" = "$(OVERLAY)" ]; then \
@@ -78,10 +88,10 @@ $(PAC_ZIP): $(VITIS_OVERLAY_BIT)
 	mkdir -p $(PAC_SUBDIR)
 	cp $(VITIS_OVERLAY_BIT) $(PAC_SUBDIR)/.
 	cp $(VITIS_OVERLAY_XCLBIN) $(PAC_SUBDIR)/.
-	cp $(PETALINUX_IMAGES)/system.dtb $(PAC_SUBDIR)/.
-	cp $(PETALINUX_IMAGES)/bl31.elf $(PAC_SUBDIR)/.
-	cp $(PETALINUX_IMAGES)/pmufw.elf $(PAC_SUBDIR)/.
-	cp $(PETALINUX_IMAGES)/zynqmp_fsbl.elf $(PAC_SUBDIR)/.
+	cp $(PETL_IMG_DIR)/system.dtb $(PAC_SUBDIR)/.
+	cp $(PETL_IMG_DIR)/bl31.elf $(PAC_SUBDIR)/.
+	cp $(PETL_IMG_DIR)/pmufw.elf $(PAC_SUBDIR)/.
+	cp $(PETL_IMG_DIR)/zynqmp_fsbl.elf $(PAC_SUBDIR)/.
 	@echo 'name: $(PF_NAME)' > $(PAC_MANIFEST)
 	@echo 'description: Boot assets for $(OVERLAY) platform' >> $(PAC_MANIFEST)
 	@echo 'revision: 1' >> $(PAC_MANIFEST)
@@ -97,6 +107,11 @@ $(PAC_ZIP): $(VITIS_OVERLAY_BIT)
 	@echo '        [destination_cpu=a53-0, exception_level=el-2] /usr/lib/u-boot/xilinx_zynqmp_virt/u-boot.elf' >> $(PAC_BOOTGEN)
 	@echo '}' >> $(PAC_BOOTGEN)
 	cd $(PAC_ROOT) && zip -r $(PAC_ZIP) $(PAC_NAME)
+
+.PHONY: petalinux
+petalinux: $(PETL_BL31_ELF) $(PETL_PMUFW_ELF) $(PETL_FSBL_ELF) $(PETL_DTB)
+$(PETL_BL31_ELF) $(PETL_PMUFW_ELF) $(PETL_FSBL_ELF) $(PETL_DTB): $(VITIS_OVERLAY_BIT)
+	make -C petalinux petalinux OVERLAY=$(OVERLAY)
 
 .PHONY: overlay
 overlay: $(VITIS_OVERLAY_BIT)
@@ -134,6 +149,7 @@ $(PFM_XPFM):
 
 .PHONY: clean
 clean:
+	$(foreach o, $(OVERLAY_LIST), $(MAKE) -C $(PLNX_DIR) clean OVERLAY=$(o);)
 	$(foreach o, $(OVERLAY_LIST), $(MAKE) -C $(VITIS_DIR)/$(o) clean;)
 	$(foreach p, $(PFM_LIST), $(MAKE) -C $(PFM_DIR) clean PLATFORM=$(p) VERSION=$(PFM_VER);)
 	$(foreach p, $(PFM_LIST), rm -r $(PAC_ROOT);)
