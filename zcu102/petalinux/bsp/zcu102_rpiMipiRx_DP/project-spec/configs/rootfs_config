@@ -615,7 +615,7 @@ CONFIG_openssh-sftp-server=y
 #
 # wget 
 #
-# CONFIG_wget is not set
+CONFIG_wget=y
 # CONFIG_wget-dev is not set
 # CONFIG_wget-dbg is not set
 
@@ -701,14 +701,14 @@ CONFIG_parted=y
 #
 # gawk 
 #
-# CONFIG_gawk is not set
+CONFIG_gawk=y
 # CONFIG_gawk-dbg is not set
 # CONFIG_gawk-dev is not set
 
 #
 # git 
 #
-# CONFIG_git is not set
+CONFIG_git=y
 # CONFIG_git-bash-completion is not set
 # CONFIG_git-perltools is not set
 # CONFIG_gitweb is not set
@@ -856,14 +856,14 @@ CONFIG_pciutils=y
 #
 # unzip 
 #
-# CONFIG_unzip is not set
+CONFIG_unzip=y
 # CONFIG_unzip-dbg is not set
 # CONFIG_unzip-dev is not set
 
 #
 # vim 
 #
-# CONFIG_vim is not set
+CONFIG_vim=y
 # CONFIG_vim-help is not set
 # CONFIG_vim-dbg is not set
 # CONFIG_vim-vimrc is not set
@@ -876,7 +876,7 @@ CONFIG_pciutils=y
 #
 # zip 
 #
-# CONFIG_zip is not set
+CONFIG_zip=y
 # CONFIG_zip-dev is not set
 # CONFIG_zip-dbg is not set
 
@@ -2115,7 +2115,7 @@ CONFIG_zocl=y
 #
 # opencl-clhpp
 #
-CONFIG_opencl-clhpp=y
+# CONFIG_opencl-clhpp-dev is not set
 
 #
 # opencl-headers
@@ -2391,7 +2391,7 @@ CONFIG_udev-extraconf=y
 #
 # gstreamer1.0-plugins-bad 
 #
-# CONFIG_gstreamer1.0-plugins-bad is not set
+CONFIG_gstreamer1.0-plugins-bad=y
 # CONFIG_gstreamer1.0-plugins-bad-meta is not set
 # CONFIG_gstreamer1.0-plugins-bad-dev is not set
 # CONFIG_gstreamer1.0-plugins-bad-dbg is not set
@@ -2399,8 +2399,8 @@ CONFIG_udev-extraconf=y
 #
 # gstreamer1.0-plugins-base 
 #
-# CONFIG_gstreamer1.0-plugins-base is not set
-# CONFIG_gstreamer1.0-plugins-base-apps is not set
+CONFIG_gstreamer1.0-plugins-base=y
+CONFIG_gstreamer1.0-plugins-base-apps=y
 # CONFIG_gstreamer1.0-plugins-base-dev is not set
 # CONFIG_gstreamer1.0-plugins-base-dbg is not set
 # CONFIG_gstreamer1.0-plugins-base-meta is not set
@@ -2408,7 +2408,7 @@ CONFIG_udev-extraconf=y
 #
 # gstreamer1.0-plugins-good 
 #
-# CONFIG_gstreamer1.0-plugins-good is not set
+CONFIG_gstreamer1.0-plugins-good=y
 # CONFIG_gstreamer1.0-plugins-good-dev is not set
 # CONFIG_gstreamer1.0-plugins-good-dbg is not set
 # CONFIG_gstreamer1.0-plugins-good-meta is not set
@@ -2539,7 +2539,7 @@ CONFIG_udev-extraconf=y
 #
 # net-tools 
 #
-# CONFIG_net-tools is not set
+CONFIG_net-tools=y
 # CONFIG_net-tools-dbg is not set
 # CONFIG_net-tools-dev is not set
 
@@ -2735,7 +2735,7 @@ CONFIG_packagegroup-core-ssh-dropbear=y
 #
 # python3 
 #
-# CONFIG_python3 is not set
+CONFIG_python3=y
 # CONFIG_python3-crypt is not set
 # CONFIG_python3-unixadmin is not set
 # CONFIG_python3-io is not set
@@ -3426,14 +3426,14 @@ CONFIG_watchdog-init=y
 #
 # gstreamer1.0 
 #
-# CONFIG_gstreamer1.0 is not set
+CONFIG_gstreamer1.0=y
 # CONFIG_gstreamer1.0-dev is not set
 # CONFIG_gstreamer1.0-dbg is not set
 
 #
 # gstreamer1.0-omx 
 #
-# CONFIG_gstreamer1.0-omx is not set
+CONFIG_gstreamer1.0-omx=y
 # CONFIG_gstreamer1.0-omx-dbg is not set
 # CONFIG_gstreamer1.0-omx-dev is not set
 
@@ -3984,7 +3984,7 @@ CONFIG_packagegroup-petalinux-matchbox=y
 #
 # packagegroup-petalinux-multimedia 
 #
-# CONFIG_packagegroup-petalinux-multimedia is not set
+CONFIG_packagegroup-petalinux-multimedia=y
 # CONFIG_packagegroup-petalinux-multimedia-dbg is not set
 # CONFIG_packagegroup-petalinux-multimedia-dev is not set
 
@@ -4019,7 +4019,7 @@ CONFIG_packagegroup-petalinux-matchbox=y
 #
 # packagegroup-petalinux-opencv 
 #
-# CONFIG_packagegroup-petalinux-opencv is not set
+CONFIG_packagegroup-petalinux-opencv=y
 # CONFIG_packagegroup-petalinux-opencv-dev is not set
 # CONFIG_packagegroup-petalinux-opencv-dbg is not set
 
@@ -4098,6 +4098,12 @@ CONFIG_imagefeature-hwcodecs=y
 # CONFIG_auto-login is not set
 CONFIG_Init-manager-systemd=y
 # CONFIG_Init-manager-sysvinit is not set
+
+#
+# modules 
+#
+# CONFIG_xilinx-isp-module is not set
+CONFIG_xilinx-isppipeline=y
 
 #
 # user packages 
