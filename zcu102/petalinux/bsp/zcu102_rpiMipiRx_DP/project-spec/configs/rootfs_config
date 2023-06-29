@@ -111,7 +111,7 @@ CONFIG_system-zynqmp=y
 #
 # dnf
 #
-# CONFIG_dnf is not set
+CONFIG_dnf=y
 
 #
 # e2fsprogs 
@@ -120,7 +120,7 @@ CONFIG_system-zynqmp=y
 # CONFIG_e2fsprogs-dev is not set
 CONFIG_e2fsprogs-mke2fs=y
 # CONFIG_e2fsprogs-dbg is not set
-# CONFIG_e2fsprogs-resize2fs is not set
+CONFIG_e2fsprogs-resize2fs=y
 # CONFIG_e2fsprogs-tune2fs is not set
 # CONFIG_libss is not set
 # CONFIG_libcomerr is not set
@@ -1110,7 +1110,7 @@ CONFIG_run-postinsts=y
 #
 # tcl 
 #
-# CONFIG_tcl is not set
+CONFIG_tcl=y
 # CONFIG_tcl-dbg is not set
 # CONFIG_tcl-lib is not set
 # CONFIG_tcl-dev is not set
@@ -1523,9 +1523,13 @@ CONFIG_libdfx=y
 #
 # libmali-xlnx 
 #
-# CONFIG_libmali-xlnx is not set
+CONFIG_libmali-xlnx=y
 # CONFIG_libmali-xlnx-dbg is not set
 # CONFIG_libmali-xlnx-dev is not set
+# CONFIG_mali-backend-fbdev is not set
+# CONFIG_mali-backend-headless is not set
+# CONFIG_mali-backend-wayland is not set
+CONFIG_mali-backend-x11=y
 
 #
 # libmetal 
@@ -2115,7 +2119,7 @@ CONFIG_zocl=y
 #
 # opencl-clhpp
 #
-# CONFIG_opencl-clhpp-dev is not set
+CONFIG_opencl-clhpp-dev=y
 
 #
 # opencl-headers
@@ -2305,7 +2309,7 @@ CONFIG_udev-extraconf=y
 # gcc-runtime 
 #
 # CONFIG_libstdcPLUSPLUS-dev is not set
-# CONFIG_libstdcPLUSPLUS is not set
+CONFIG_libstdcPLUSPLUS=y
 
 #
 # gcr 
@@ -2317,7 +2321,7 @@ CONFIG_udev-extraconf=y
 #
 # gdb 
 #
-# CONFIG_gdb is not set
+CONFIG_gdb=y
 # CONFIG_gdb-dev is not set
 # CONFIG_gdbserver is not set
 # CONFIG_gdb-dbg is not set
@@ -2610,7 +2614,7 @@ CONFIG_packagegroup-core-boot=y
 #
 # packagegroup-core-buildessential 
 #
-# CONFIG_packagegroup-core-buildessential is not set
+CONFIG_packagegroup-core-buildessential=y
 # CONFIG_packagegroup-core-buildessential-dbg is not set
 # CONFIG_packagegroup-core-buildessential-dev is not set
 
@@ -3169,7 +3173,7 @@ CONFIG_media-ctl=y
 #
 # valgrind
 #
-# CONFIG_valgrind is not set
+CONFIG_valgrind=y
 # CONFIG_valgrind-dbg is not set
 # CONFIG_valgrind-dev is not set
 
@@ -3569,7 +3573,7 @@ CONFIG_hellopm=y
 #
 # resize-part
 #
-# CONFIG_resize-part is not set
+CONFIG_resize-part=y
 # CONFIG_resize-part-dbg is not set
 # CONFIG_resize-part-dev is not set
 
@@ -4020,7 +4024,7 @@ CONFIG_packagegroup-petalinux-multimedia=y
 # packagegroup-petalinux-opencv 
 #
 CONFIG_packagegroup-petalinux-opencv=y
-# CONFIG_packagegroup-petalinux-opencv-dev is not set
+CONFIG_packagegroup-petalinux-opencv-dev=y
 # CONFIG_packagegroup-petalinux-opencv-dbg is not set
 
 #
@@ -4048,7 +4052,7 @@ CONFIG_packagegroup-petalinux-opencv=y
 #
 # packagegroup-petalinux-self-hosted 
 #
-# CONFIG_packagegroup-petalinux-self-hosted is not set
+CONFIG_packagegroup-petalinux-self-hosted=y
 # CONFIG_packagegroup-petalinux-self-hosted-dbg is not set
 # CONFIG_packagegroup-petalinux-self-hosted-dev is not set
 
@@ -4093,8 +4097,10 @@ CONFIG_packagegroup-petalinux-x11=y
 CONFIG_imagefeature-ssh-server-dropbear=y
 # CONFIG_imagefeature-ssh-server-openssh is not set
 CONFIG_imagefeature-hwcodecs=y
-# CONFIG_imagefeature-package-management is not set
-# CONFIG_imagefeature-debug-tweaks is not set
+CONFIG_imagefeature-package-management=y
+CONFIG_package-feed-uris=""
+CONFIG_package-feed-archs="${@d.getVar('PACKAGE_ARCHS').replace('-','_')} zynqmp_eg zynqmp_ev zynqmp_dr zynqmp_cg"
+CONFIG_imagefeature-debug-tweaks=y
 # CONFIG_auto-login is not set
 CONFIG_Init-manager-systemd=y
 # CONFIG_Init-manager-sysvinit is not set
@@ -4102,19 +4108,24 @@ CONFIG_Init-manager-systemd=y
 #
 # modules 
 #
-# CONFIG_xilinx-isp-module is not set
 CONFIG_xilinx-isppipeline=y
+CONFIG_dpu-sw-optimize=y
 
 #
 # user packages 
 #
 CONFIG_board-fpga-autoload=y
+CONFIG_cmake=y
 # CONFIG_gpio-demo is not set
+CONFIG_opencv-staticdev=y
 # CONFIG_peekpoke is not set
+CONFIG_vitis-ai-library=y
+# CONFIG_vitis-ai-library-dbg is not set
+CONFIG_vitis-ai-library-dev=y
 
 #
 # PetaLinux RootFS Settings
 #
 CONFIG_ADD_EXTRA_USERS="root:root;petalinux::passwd-expire;"
-CONFIG_ADD_USERS_TO_GROUPS="petalinux:audio,video;"
+CONFIG_ADD_USERS_TO_GROUPS="petalinux:audio,video,disk,kmem;"
 CONFIG_ADD_USERS_TO_SUDOERS="petalinux"

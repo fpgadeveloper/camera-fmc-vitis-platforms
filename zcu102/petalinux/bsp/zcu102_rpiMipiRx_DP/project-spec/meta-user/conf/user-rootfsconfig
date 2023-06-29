@@ -11,3 +11,10 @@ CONFIG_packagegroup-petalinux-audio
 CONFIG_packagegroup-petalinux-x11
 CONFIG_board-fpga-autoload
 CONFIG_xilinx-isppipeline
+CONFIG_cmake
+CONFIG_dpu-sw-optimize
+CONFIG_vitis-ai-library
+CONFIG_vitis-ai-library-dev
+CONFIG_vitis-ai-library-dbg
+CONFIG_opencv-staticdev
+
