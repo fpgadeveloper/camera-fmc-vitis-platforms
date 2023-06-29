@@ -3,8 +3,19 @@
 
 CONFIG_gpio-demo
 CONFIG_peekpoke
-CONFIG_gstreamer-vcu-examples
+CONFIG_packagegroup-petalinux-gstreamer
+CONFIG_packagegroup-petalinux-multimedia
+CONFIG_packagegroup-petalinux-opencv
 CONFIG_packagegroup-petalinux-v4lutils
 CONFIG_packagegroup-petalinux-audio
 CONFIG_gstreamer-vcu-notebooks
+CONFIG_packagegroup-petalinux-x11
 CONFIG_board-fpga-autoload
+CONFIG_xilinx-isppipeline
+CONFIG_cmake
+CONFIG_dpu-sw-optimize
+CONFIG_vitis-ai-library
+CONFIG_vitis-ai-library-dev
+CONFIG_vitis-ai-library-dbg
+CONFIG_opencv-staticdev
+

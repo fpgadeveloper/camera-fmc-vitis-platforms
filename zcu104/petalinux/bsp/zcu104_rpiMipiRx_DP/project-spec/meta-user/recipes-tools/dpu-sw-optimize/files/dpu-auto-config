@@ -1,0 +1,15 @@
+#!/bin/bash
+### BEGIN INFO
+# To start:
+#    1.Qos
+#    2.Auto Resize
+#    3.IRPS5401 for zcu104
+#    4.Dot tool
+### EBD INFO
+
+( cd /home/root/dpu_sw_optimize/zynqmp/;
+if [ -x zynqmp_dpu_optimize.sh ]; then
+	./zynqmp_dpu_optimize.sh
+fi )
+
+dot -c > /dev/null 2>&1
