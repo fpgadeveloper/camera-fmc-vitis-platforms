@@ -3444,9 +3444,9 @@ CONFIG_gstreamer1.0-omx=y
 #
 # gstreamer1.0-rtsp-server 
 #
-# CONFIG_gstreamer1.0-rtsp-server is not set
+CONFIG_gstreamer1.0-rtsp-server=y
 # CONFIG_gstreamer1.0-rtsp-server-dbg is not set
-# CONFIG_gstreamer1.0-rtsp-server-dev is not set
+CONFIG_gstreamer1.0-rtsp-server-dev=y
 # CONFIG_gstreamer1.0-rtsp-server-meta is not set
 
 #

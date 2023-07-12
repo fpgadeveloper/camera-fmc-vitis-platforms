@@ -86,10 +86,6 @@
 	};
 };
 
-&misc_clk_2 {
-	clock-frequency = <199998000>;
-};
-
 &axi_iic_0 {
 	imx219: sensor@10 {
 		compatible = "sony,imx219";
@@ -110,7 +106,6 @@
 };
 
 &raspi_pipeline_mipi_csi2_rx_subsyst_0 {
-	clocks = <&misc_clk_0>, <&misc_clk_1>, <&misc_clk_2>;
 	xlnx,en-active-lanes;
 };
 
@@ -120,7 +115,6 @@
 
 &raspi_pipeline_ISPPipeline_accel_0 {
 	compatible = "xlnx,ISPPipeline_accel";
-	clocks = <&misc_clk_2>;
 	reset-gpios = <&gpio 82 1>;
 	xlnx,max-height = <1080>;
 	xlnx,max-width = <1920>;
@@ -153,11 +147,6 @@
 
 &raspi_pipeline_v_proc_ss_0 {
 	compatible = "xlnx,v-vpss-scaler-2.2";
-	clocks = <&misc_clk_2>, <&misc_clk_2>;
-};
-
-&raspi_pipeline_v_frmbuf_wr_0 {
-	clocks = <&misc_clk_2>;
 };
 
 &scaler_port0raspi_pipeline_v_proc_ss_0 {
@@ -168,7 +157,6 @@
 
 /* vcu encode/decode */
 &vcu_vcu_0 {
-	clocks = <&misc_clk_5>, <&misc_clk_0>, <&vcu_vcu_0 0>, <&vcu_vcu_0 1>, <&vcu_vcu_0 2>, <&vcu_vcu_0 3>;
 	xlnx,skip-isolation;
 };
 
