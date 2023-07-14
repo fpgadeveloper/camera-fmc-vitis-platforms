@@ -466,36 +466,36 @@ proc create_root_design { parentCell } {
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [ list \
-   CONFIG.CLKOUT1_JITTER {102.096} \
-   CONFIG.CLKOUT1_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT1_JITTER {102.086} \
+   CONFIG.CLKOUT1_PHASE_ERROR {87.180} \
    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} \
-   CONFIG.CLKOUT2_JITTER {115.843} \
-   CONFIG.CLKOUT2_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT2_JITTER {115.831} \
+   CONFIG.CLKOUT2_PHASE_ERROR {87.180} \
    CONFIG.CLKOUT2_USED {true} \
-   CONFIG.CLKOUT3_JITTER {102.096} \
+   CONFIG.CLKOUT3_JITTER {94.862} \
    CONFIG.CLKOUT3_MATCHED_ROUTING {true} \
-   CONFIG.CLKOUT3_PHASE_ERROR {87.187} \
-   CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {200.000} \
+   CONFIG.CLKOUT3_PHASE_ERROR {87.180} \
+   CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {300.000} \
    CONFIG.CLKOUT3_USED {true} \
-   CONFIG.CLKOUT4_JITTER {132.698} \
-   CONFIG.CLKOUT4_PHASE_ERROR {87.187} \
+   CONFIG.CLKOUT4_JITTER {132.683} \
+   CONFIG.CLKOUT4_PHASE_ERROR {87.180} \
    CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {50.000} \
    CONFIG.CLKOUT4_USED {true} \
-   CONFIG.CLKOUT5_JITTER {90.083} \
+   CONFIG.CLKOUT5_JITTER {83.768} \
    CONFIG.CLKOUT5_MATCHED_ROUTING {true} \
-   CONFIG.CLKOUT5_PHASE_ERROR {87.187} \
-   CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {400.000} \
+   CONFIG.CLKOUT5_PHASE_ERROR {87.180} \
+   CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {600.000} \
    CONFIG.CLKOUT5_USED {true} \
    CONFIG.CLK_OUT1_PORT {clk_200M} \
    CONFIG.CLK_OUT2_PORT {clk_100M} \
-   CONFIG.CLK_OUT3_PORT {clkv_200M} \
+   CONFIG.CLK_OUT3_PORT {clk_300M} \
    CONFIG.CLK_OUT4_PORT {clk_50M} \
-   CONFIG.CLK_OUT5_PORT {clk_400M} \
+   CONFIG.CLK_OUT5_PORT {clk_600M} \
    CONFIG.MMCM_CLKOUT0_DIVIDE_F {6.000} \
    CONFIG.MMCM_CLKOUT1_DIVIDE {12} \
-   CONFIG.MMCM_CLKOUT2_DIVIDE {6} \
+   CONFIG.MMCM_CLKOUT2_DIVIDE {4} \
    CONFIG.MMCM_CLKOUT3_DIVIDE {24} \
-   CONFIG.MMCM_CLKOUT4_DIVIDE {3} \
+   CONFIG.MMCM_CLKOUT4_DIVIDE {2} \
    CONFIG.MMCM_DIVCLK_DIVIDE {1} \
    CONFIG.NUM_OUT_CLKS {5} \
    CONFIG.PRIM_SOURCE {Global_buffer} \
@@ -506,11 +506,11 @@ proc create_root_design { parentCell } {
   # Create instance: proc_sys_reset_100MHz, and set properties
   set proc_sys_reset_100MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_100MHz ]
 
-  # Create instance: proc_sys_reset_200MHz, and set properties
-  set proc_sys_reset_200MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_200MHz ]
+  # Create instance: proc_sys_reset_300MHz, and set properties
+  set proc_sys_reset_300MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_300MHz ]
 
-  # Create instance: proc_sys_reset_400MHz, and set properties
-  set proc_sys_reset_400MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_400MHz ]
+  # Create instance: proc_sys_reset_600MHz, and set properties
+  set proc_sys_reset_600MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_600MHz ]
 
   # Create instance: raspi_pipeline
   create_hier_cell_raspi_pipeline [current_bd_instance .] raspi_pipeline
@@ -550,19 +550,19 @@ proc create_root_design { parentCell } {
   connect_bd_net -net ARESETN_1 [get_bd_pins axi_ic_ctrl_100/ARESETN] [get_bd_pins proc_sys_reset_100MHz/interconnect_aresetn]
   connect_bd_net -net PS_0_emio_gpio_o [get_bd_pins PS_0/emio_gpio_o] [get_bd_pins raspi_pipeline/Din] [get_bd_pins vcu/Din]
   connect_bd_net -net PS_0_pl_clk0 [get_bd_pins PS_0/pl_clk0] [get_bd_pins clk_wiz_0/clk_in1]
-  connect_bd_net -net PS_0_pl_resetn0 [get_bd_pins PS_0/pl_resetn0] [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_100MHz/ext_reset_in] [get_bd_pins proc_sys_reset_200MHz/ext_reset_in] [get_bd_pins proc_sys_reset_400MHz/ext_reset_in]
+  connect_bd_net -net PS_0_pl_resetn0 [get_bd_pins PS_0/pl_resetn0] [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_100MHz/ext_reset_in] [get_bd_pins proc_sys_reset_300MHz/ext_reset_in] [get_bd_pins proc_sys_reset_600MHz/ext_reset_in]
   connect_bd_net -net axi_iic_0_iic2intc_irpt [get_bd_pins axi_iic_0/iic2intc_irpt] [get_bd_pins xlconcat_0_0/In3]
   connect_bd_net -net bg0_pin6_nc_0_1 [get_bd_ports bg0_pin6_nc_0] [get_bd_pins raspi_pipeline/bg0_pin6_nc_0]
   connect_bd_net -net bg1_pin6_nc_0_1 [get_bd_ports bg1_pin6_nc_0] [get_bd_pins raspi_pipeline/bg1_pin6_nc_0]
   connect_bd_net -net clk_sel_dout [get_bd_ports clk_sel] [get_bd_pins clk_sel/dout]
   connect_bd_net -net clk_wiz_0_clk_100M [get_bd_pins PS_0/maxihpm0_lpd_aclk] [get_bd_pins axi_ic_ctrl_100/ACLK] [get_bd_pins axi_ic_ctrl_100/M00_ACLK] [get_bd_pins axi_ic_ctrl_100/M01_ACLK] [get_bd_pins axi_ic_ctrl_100/M02_ACLK] [get_bd_pins axi_ic_ctrl_100/S00_ACLK] [get_bd_pins axi_iic_0/s_axi_aclk] [get_bd_pins clk_wiz_0/clk_100M] [get_bd_pins proc_sys_reset_100MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/lite_aclk] [get_bd_pins vcu/s_axi_lite_aclk]
   connect_bd_net -net clk_wiz_0_clk_200M [get_bd_pins clk_wiz_0/clk_200M] [get_bd_pins raspi_pipeline/dphy_clk_200M]
-  connect_bd_net -net clk_wiz_0_clk_300M [get_bd_pins PS_0/maxihpm0_fpd_aclk] [get_bd_pins PS_0/maxihpm1_fpd_aclk] [get_bd_pins PS_0/saxi_lpd_aclk] [get_bd_pins PS_0/saxihp0_fpd_aclk] [get_bd_pins PS_0/saxihp1_fpd_aclk] [get_bd_pins PS_0/saxihp2_fpd_aclk] [get_bd_pins PS_0/saxihp3_fpd_aclk] [get_bd_pins PS_0/saxihpc0_fpd_aclk] [get_bd_pins PS_0/saxihpc1_fpd_aclk] [get_bd_pins axi_ic_accel_ctrl/ACLK] [get_bd_pins axi_ic_accel_ctrl/M00_ACLK] [get_bd_pins axi_ic_accel_ctrl/S00_ACLK] [get_bd_pins axi_ic_ctrl_300/ACLK] [get_bd_pins axi_ic_ctrl_300/M00_ACLK] [get_bd_pins axi_ic_ctrl_300/M01_ACLK] [get_bd_pins axi_ic_ctrl_300/M02_ACLK] [get_bd_pins axi_ic_ctrl_300/S00_ACLK] [get_bd_pins axi_ic_mcu/ACLK] [get_bd_pins axi_ic_mcu/M00_ACLK] [get_bd_pins axi_ic_mcu/S00_ACLK] [get_bd_pins axi_vip_0/aclk] [get_bd_pins clk_wiz_0/clkv_200M] [get_bd_pins proc_sys_reset_200MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/aclk] [get_bd_pins vcu/m_axi_dec_aclk]
-  connect_bd_net -net clk_wiz_0_clk_400M [get_bd_pins clk_wiz_0/clk_400M] [get_bd_pins proc_sys_reset_400MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_clk_300M [get_bd_pins PS_0/maxihpm0_fpd_aclk] [get_bd_pins PS_0/maxihpm1_fpd_aclk] [get_bd_pins PS_0/saxi_lpd_aclk] [get_bd_pins PS_0/saxihp0_fpd_aclk] [get_bd_pins PS_0/saxihp1_fpd_aclk] [get_bd_pins PS_0/saxihp2_fpd_aclk] [get_bd_pins PS_0/saxihp3_fpd_aclk] [get_bd_pins PS_0/saxihpc0_fpd_aclk] [get_bd_pins PS_0/saxihpc1_fpd_aclk] [get_bd_pins axi_ic_accel_ctrl/ACLK] [get_bd_pins axi_ic_accel_ctrl/M00_ACLK] [get_bd_pins axi_ic_accel_ctrl/S00_ACLK] [get_bd_pins axi_ic_ctrl_300/ACLK] [get_bd_pins axi_ic_ctrl_300/M00_ACLK] [get_bd_pins axi_ic_ctrl_300/M01_ACLK] [get_bd_pins axi_ic_ctrl_300/M02_ACLK] [get_bd_pins axi_ic_ctrl_300/S00_ACLK] [get_bd_pins axi_ic_mcu/ACLK] [get_bd_pins axi_ic_mcu/M00_ACLK] [get_bd_pins axi_ic_mcu/S00_ACLK] [get_bd_pins axi_vip_0/aclk] [get_bd_pins clk_wiz_0/clk_300M] [get_bd_pins proc_sys_reset_300MHz/slowest_sync_clk] [get_bd_pins raspi_pipeline/aclk] [get_bd_pins vcu/m_axi_dec_aclk]
   connect_bd_net -net clk_wiz_0_clk_50M [get_bd_pins clk_wiz_0/clk_50M] [get_bd_pins vcu/pll_ref_clk]
-  connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_100MHz/dcm_locked] [get_bd_pins proc_sys_reset_200MHz/dcm_locked] [get_bd_pins proc_sys_reset_400MHz/dcm_locked]
-  connect_bd_net -net proc_sys_reset_1_interconnect_aresetn [get_bd_pins axi_ic_accel_ctrl/ARESETN] [get_bd_pins axi_ic_ctrl_300/ARESETN] [get_bd_pins axi_ic_mcu/ARESETN] [get_bd_pins proc_sys_reset_200MHz/interconnect_aresetn]
-  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_pins axi_ic_accel_ctrl/M00_ARESETN] [get_bd_pins axi_ic_accel_ctrl/S00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M01_ARESETN] [get_bd_pins axi_ic_ctrl_300/M02_ARESETN] [get_bd_pins axi_ic_ctrl_300/S00_ARESETN] [get_bd_pins axi_ic_mcu/M00_ARESETN] [get_bd_pins axi_ic_mcu/S00_ARESETN] [get_bd_pins axi_vip_0/aresetn] [get_bd_pins proc_sys_reset_200MHz/peripheral_aresetn] [get_bd_pins raspi_pipeline/aresetn] [get_bd_pins vcu/aresetn]
+  connect_bd_net -net clk_wiz_0_clk_600M [get_bd_pins clk_wiz_0/clk_600M] [get_bd_pins proc_sys_reset_600MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_100MHz/dcm_locked] [get_bd_pins proc_sys_reset_300MHz/dcm_locked] [get_bd_pins proc_sys_reset_600MHz/dcm_locked]
+  connect_bd_net -net proc_sys_reset_1_interconnect_aresetn [get_bd_pins axi_ic_accel_ctrl/ARESETN] [get_bd_pins axi_ic_ctrl_300/ARESETN] [get_bd_pins axi_ic_mcu/ARESETN] [get_bd_pins proc_sys_reset_300MHz/interconnect_aresetn]
+  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_pins axi_ic_accel_ctrl/M00_ARESETN] [get_bd_pins axi_ic_accel_ctrl/S00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M00_ARESETN] [get_bd_pins axi_ic_ctrl_300/M01_ARESETN] [get_bd_pins axi_ic_ctrl_300/M02_ARESETN] [get_bd_pins axi_ic_ctrl_300/S00_ARESETN] [get_bd_pins axi_ic_mcu/M00_ARESETN] [get_bd_pins axi_ic_mcu/S00_ARESETN] [get_bd_pins axi_vip_0/aresetn] [get_bd_pins proc_sys_reset_300MHz/peripheral_aresetn] [get_bd_pins raspi_pipeline/aresetn] [get_bd_pins vcu/aresetn]
   connect_bd_net -net proc_sys_reset_2_peripheral_aresetn [get_bd_pins axi_ic_ctrl_100/M00_ARESETN] [get_bd_pins axi_ic_ctrl_100/M01_ARESETN] [get_bd_pins axi_ic_ctrl_100/M02_ARESETN] [get_bd_pins axi_ic_ctrl_100/S00_ARESETN] [get_bd_pins axi_iic_0/s_axi_aresetn] [get_bd_pins proc_sys_reset_100MHz/peripheral_aresetn] [get_bd_pins raspi_pipeline/lite_aresetn]
   connect_bd_net -net raspi_pipeline_csirxss_csi_irq [get_bd_pins raspi_pipeline/csirxss_csi_irq] [get_bd_pins xlconcat_0_0/In0]
   connect_bd_net -net raspi_pipeline_dem_irq [get_bd_pins raspi_pipeline/dem_irq] [get_bd_pins xlconcat_0_0/In1]
@@ -597,7 +597,7 @@ proc create_root_design { parentCell } {
   set_property PFM.AXI_PORT {S_AXI_HPC1_FPD {memport "S_AXI_HP" sptag "HPC1" memory "PS_0 HPC1_DDR_LOW" is_range "false"} S_AXI_HP1_FPD {memport "S_AXI_HP" sptag "HP1" memory "PS_0 HP1_DDR_LOW" is_range "false"} S_AXI_HP3_FPD {memport "S_AXI_HP" sptag "HP3" memory "PS_0 HP3_DDR_LOW" is_range "false"}} [get_bd_cells /PS_0]
   set_property PFM.IRQ {pl_ps_irq0 {id 0 range 7}} [get_bd_cells /PS_0]
   set_property PFM.AXI_PORT {M01_AXI {memport "M_AXI_GP" sptag "" memory ""} M02_AXI {memport "M_AXI_GP" sptag "" memory ""} M03_AXI {memport "M_AXI_GP" sptag "" memory ""} M04_AXI {memport "M_AXI_GP" sptag "" memory ""} M05_AXI {memport "M_AXI_GP" sptag "" memory ""} M06_AXI {memport "M_AXI_GP" sptag "" memory ""} M07_AXI {memport "M_AXI_GP" sptag "" memory ""} M08_AXI {memport "M_AXI_GP" sptag "" memory ""} M09_AXI {memport "M_AXI_GP" sptag "" memory ""} M10_AXI {memport "M_AXI_GP" sptag "" memory ""} M11_AXI {memport "M_AXI_GP" sptag "" memory ""} M12_AXI {memport "M_AXI_GP" sptag "" memory ""} M13_AXI {memport "M_AXI_GP" sptag "" memory ""} M14_AXI {memport "M_AXI_GP" sptag "" memory ""} M15_AXI {memport "M_AXI_GP" sptag "" memory ""}} [get_bd_cells /axi_ic_accel_ctrl]
-  set_property PFM.CLOCK {clk_100M {id "2" is_default "false" proc_sys_reset "/proc_sys_reset_100MHz" status "fixed" freq_hz "99999000"} clkv_200M {id "18" is_default "true" proc_sys_reset "/proc_sys_reset_200MHz" status "fixed" freq_hz "199998000"} clk_400M {id "25" is_default "false" proc_sys_reset "/proc_sys_reset_400MHz" status "fixed" freq_hz "399960000"}} [get_bd_cells /clk_wiz_0]
+  set_property PFM.CLOCK {clk_100M {id "2" is_default "false" proc_sys_reset "/proc_sys_reset_100MHz" status "fixed" freq_hz "99999000"} clk_300M {id "32" is_default "true" proc_sys_reset "/proc_sys_reset_300MHz" status "fixed" freq_hz "300000000"} clk_600M {id "33" is_default "false" proc_sys_reset "/proc_sys_reset_600MHz" status "fixed" freq_hz "600000000"}} [get_bd_cells /clk_wiz_0]
 
 
   validate_bd_design

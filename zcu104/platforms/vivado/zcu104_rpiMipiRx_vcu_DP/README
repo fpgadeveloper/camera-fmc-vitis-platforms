@@ -1,7 +1,7 @@
-# zcu106_rpiMipiRx_vcu_DP
+# zcu104_rpiMipiRx_vcu_DP
 
-The zcu106_rpiMipiRx_vcu_DP Vivado project is generated in this directory.
-The zcu106_rpiMipiRx_vcu_DP design supports the following multimedia peripherals
+The zcu104_rpiMipiRx_vcu_DP Vivado project is generated in this directory.
+The zcu104_rpiMipiRx_vcu_DP design supports the following multimedia peripherals
 and interfaces:
 
 1. MIPI CSI PL interface connected to the IMX219 image sensor Raspberry Pi Camera v2.
@@ -64,7 +64,7 @@ block design and finally build a XSA.
 
 The generated XSA will be located at:
 
-> ./project/zcu106_rpiMipiRx_vcu_DP.xsa
+> ./project/zcu104_rpiMipiRx_vcu_DP.xsa
 
 
 Modify the Vivado design:
@@ -73,7 +73,7 @@ Modify the Vivado design:
 To open the Vivado project run the following command from the
 Vivado tcl console:
 
-> open_project ./project/zcu106_rpiMipiRx_vcu_DP.xpr
+> open_project ./project/zcu104_rpiMipiRx_vcu_DP.xpr
 
 The user can now modify the block design and run Vivado implementation
 and bitstream generation in the Vivado cockpit.
@@ -81,7 +81,7 @@ and bitstream generation in the Vivado cockpit.
 To write out a new extensible platform XSA file, run the following
 command from the Vivado tcl console:
 
-> write_hw_platform -force -include_bit -file zcu106_rpiMipiRx_vcu_DP.xsa
+> write_hw_platform -force -include_bit -file zcu104_rpiMipiRx_vcu_DP.xsa
 
 The new XSA file can now be used replacing the existing XSA file in the Vitis
 platform generation or as hardware handoff file inside the Petalinux project.

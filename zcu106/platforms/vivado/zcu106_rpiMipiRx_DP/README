@@ -1,18 +1,21 @@
 (C) Copyright 2020 - 2022 Xilinx, Inc.
 SPDX-License-Identifier: Apache-2.0
 
-The KV260 nlp Vivado project is generated in this directory. 
+The ZCU106 nlp Vivado project is generated in this directory. 
 The nlp design supports the following multimedia peripherals 
 and interfaces:
 
-1. MIPI CSI PL interface connected to the AR1335 IAS image sensor and  on-board
-   AP1302 ISP.
+1. MIPI CSI PL interface connected to the Raspberry Pi camera v2 on port CAM1 of 
+the RPi Camera FMC.
 
-2. DisplayPort via the PS DP interface and on-board DP splitter.
+2. MIPI CSI PL interface connected to the Raspberry Pi camera v2 on port CAM2 of 
+the RPi Camera FMC.
 
-3. USB 3.0 PS interface for connecting a UVC compliant USB microphone.
+3. DisplayPort via the PS DP interface and on-board DP splitter.
 
-4. SD card PS interface for storage.
+4. USB 3.0 PS interface for connecting a UVC compliant USB microphone.
+
+5. SD card PS interface for storage.
 
 The Vivado block design (scripts/config_bd.tcl) defines the above
 interfaces and peripherals. It also defines the Platform Interfaces
@@ -47,7 +50,7 @@ block design and finally build a XSA.
 
 The generated XSA will be located at:
 
-> ./project/kv260_ispMipiRx_rpiMipiRx_DP.xsa
+> ./project/zcu106_rpiMipiRx_DP.xsa
 
 
 Modify the Vivado design:
@@ -56,7 +59,7 @@ Modify the Vivado design:
 To open the Vivado project run the following command from the 
 Vivado tcl console:
 
-> open_project ./project/kv260_ispMipiRx_rpiMipiRx_DP.xpr
+> open_project ./project/zcu106_rpiMipiRx_DP.xpr
 
 The user can now modify the block design and run Vivado implementation 
 and bitstream generation in the Vivado cockpit.
@@ -64,7 +67,7 @@ and bitstream generation in the Vivado cockpit.
 To write out a new extensible platform XSA file, run the following 
 command from the Vivado tcl console:
 
-> write_hw_platform -force -include_bit -file kv260_ispMipiRx_rpiMipiRx_DP.xsa
+> write_hw_platform -force -include_bit -file zcu106_rpiMipiRx_DP.xsa
 
 The new XSA file can now be used replacing the existing XSA file in the Vitis
 platform generation or as hardware handoff file inside the Petalinux project.
